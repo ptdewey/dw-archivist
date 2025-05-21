@@ -10,21 +10,29 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-const targetID = "4HNlEIJh9XwruI4v23X1Gg" // text
-const discoverWeeklyID = "37i9dQZEVXcO4TRsYJw2K3"
+var (
+	debug            bool
+	targetID         string
+	discoverWeeklyID string
+	tz               string
+)
 
 func main() {
-	debug := flag.Bool("debug", false, "--debug")
+	// TODO: add options for using playlist names rather than IDs (and/or URIs)
+	flag.BoolVar(&debug, "debug", false, "--debug")
+	flag.StringVar(&targetID, "target-id", "", "--targetID <target-playlist-id>")
+	flag.StringVar(&discoverWeeklyID, "discover-weekly-id", "", "--discover-weekly-id <source-playlist-id>")
+	flag.StringVar(&tz, "tz", "America/New_York", "--tz <go-timezone-string>")
 	flag.Parse()
 
 	client, _ := auth.Authorize()
 
-	loc, err := time.LoadLocation("America/New_York")
+	loc, err := time.LoadLocation(tz)
 	if err != nil {
 		log.Fatalf("failed to load EST location: %v", err)
 	}
 
-	if *debug {
+	if debug {
 		err := playlists.CopyPlaylist(client, discoverWeeklyID, targetID)
 		if err != nil {
 			log.Printf("Error copying playlist: %v", err)
