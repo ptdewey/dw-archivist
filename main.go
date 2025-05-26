@@ -26,6 +26,9 @@ func main() {
 	flag.StringVar(&tz, "tz", "America/New_York", "--tz <go-timezone-string>")
 	flag.Parse()
 
+	fmt.Println("target-id", targetID)
+	fmt.Println("source-id", discoverWeeklyID)
+
 	client, user := auth.Authorize("token.json")
 	_ = user // FIX: replace with website serving stuff
 
