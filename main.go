@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"time"
 
@@ -25,7 +26,17 @@ func main() {
 	flag.StringVar(&tz, "tz", "America/New_York", "--tz <go-timezone-string>")
 	flag.Parse()
 
-	client, _ := auth.Authorize()
+	client, user := auth.Authorize("token.json")
+	_ = user // FIX: replace with website serving stuff
+
+	// p, err := playlists.GetUserPlaylists(context.Background(), client, user.ID)
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+	// fmt.Printf("Found %d Playlists.\n", len(p))
+	//
+	// web.InitServer(p) // REFACTOR: probably move either this or the other code somewhere else
 
 	loc, err := time.LoadLocation(tz)
 	if err != nil {
@@ -40,6 +51,7 @@ func main() {
 			log.Println("Successfully copied Discover Weekly to target playlist")
 		}
 	} else {
+		fmt.Println("Initializing scheduled jobs...")
 		c := cron.New(cron.WithLocation(loc))
 		_, err = c.AddFunc("0 12 * * 1", func() {
 			err := playlists.CopyPlaylist(client, discoverWeeklyID, targetID)
@@ -54,6 +66,7 @@ func main() {
 		}
 
 		c.Start()
+		fmt.Println("Started cron scheduler. Waiting for jobs to execute...")
 		select {}
 	}
 }

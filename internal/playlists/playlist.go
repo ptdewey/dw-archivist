@@ -40,7 +40,6 @@ func getPlaylistTracks(ctx context.Context, client *spotify.Client, playlistID s
 	var tracks []spotify.PlaylistItem
 	offset := 0
 	limit := 100
-
 	for {
 		page, err := client.GetPlaylistItems(ctx, playlistID, spotify.Offset(offset), spotify.Limit(limit))
 		if err != nil {
@@ -56,4 +55,26 @@ func getPlaylistTracks(ctx context.Context, client *spotify.Client, playlistID s
 	}
 
 	return tracks, nil
+}
+
+func GetUserPlaylists(ctx context.Context, client *spotify.Client, userID string) ([]spotify.SimplePlaylist, error) {
+	var playlists []spotify.SimplePlaylist
+	offset := 0
+	limit := 50
+	for {
+		page, err := client.GetPlaylistsForUser(ctx, userID, spotify.Offset(offset), spotify.Limit(50))
+		if err != nil {
+			return nil, err
+		}
+
+		playlists = append(playlists, page.Playlists...)
+
+		if len(page.Playlists) < limit {
+			break
+		}
+
+		offset += limit
+	}
+
+	return playlists, nil
 }

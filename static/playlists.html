@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Playlists</title>
+    <style>
+        .playlist {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+        }
+        .playlist img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 16px;
+        }
+        .playlist-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .playlist-info span {
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spotify Playlists</h1>
+    {{range .}}
+    <div class="playlist">
+        {{if .Images}}
+        <img src="{{ (index .Images 0).URL }}" alt="{{.Name}}">
+        {{else}}
+        <div style="width:100px;height:100px;background:#eee;display:flex;align-items:center;justify-content:center;">
+            No Image
+        </div>
+        {{end}}
+        <div class="playlist-info">
+            <span><strong>Name:</strong> {{.Name}}</span>
+            <span><strong>ID:</strong> {{.ID}}</span>
+            <span><strong>Tracks:</strong> {{.Tracks.Total}}</span>
+        </div>
+    </div>
+    {{end}}
+</body>
+</html>

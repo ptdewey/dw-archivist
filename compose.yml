@@ -1,0 +1,7 @@
+services:
+  dw-archivist:
+    container_name: dw-archivist
+    build: ./
+    environment:
+      - SPOTIFY_ID=${SPOTIFY_ID}
+      - SPOTIFY_SECRET=${SPOTIFY_SECRET}
