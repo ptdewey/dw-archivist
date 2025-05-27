@@ -1,4 +1,4 @@
-package auth
+package api
 
 import (
 	"context"
@@ -19,8 +19,7 @@ var (
 	auth = spotifyauth.New(
 		spotifyauth.WithRedirectURL(redirectURI),
 		spotifyauth.WithScopes(
-			spotifyauth.ScopePlaylistModifyPublic,
-			// spotifyauth.ScopePlaylistModifyPrivate,
+			spotifyauth.ScopeUserModifyPlaybackState,
 			spotifyauth.ScopePlaylistReadPrivate,
 		),
 	)
@@ -130,7 +129,7 @@ func storeToken(tok *oauth2.Token, filename string) error {
 		return err
 	}
 
-	if err := os.WriteFile(filename, data, os.ModePerm); err != nil {
+	if err := os.WriteFile(filename, data, 0644); err != nil {
 		return err
 	}
 

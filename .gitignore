@@ -24,7 +24,9 @@ go.work.sum
 # env file
 .env
 env.sh
-run.sh
 token.json
 
-dw-archivist
+data/*
+cmd/fuzzy_queuer/fuzzy_queuer
+cmd/dw_archivist/dw_archivist
+playlists.txt

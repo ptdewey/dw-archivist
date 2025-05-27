@@ -6,8 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/ptdewey/dw-archivist/internal/auth"
-	"github.com/ptdewey/dw-archivist/internal/playlists"
+	"github.com/ptdewey/spotify-tools/internal/api"
 	"github.com/robfig/cron/v3"
 )
 
@@ -29,7 +28,7 @@ func main() {
 	fmt.Println("target-id", targetID)
 	fmt.Println("source-id", discoverWeeklyID)
 
-	client, user := auth.Authorize("token.json")
+	client, user := api.Authorize("token.json")
 	_ = user // FIX: replace with website serving stuff
 
 	// p, err := playlists.GetUserPlaylists(context.Background(), client, user.ID)
@@ -47,7 +46,7 @@ func main() {
 	}
 
 	if debug {
-		err := playlists.CopyPlaylist(client, discoverWeeklyID, targetID)
+		err := api.CopyPlaylist(client, discoverWeeklyID, targetID)
 		if err != nil {
 			log.Printf("Error copying playlist: %v", err)
 		} else {
@@ -57,7 +56,7 @@ func main() {
 		fmt.Println("Initializing scheduled jobs...")
 		c := cron.New(cron.WithLocation(loc))
 		_, err = c.AddFunc("0 12 * * 1", func() {
-			err := playlists.CopyPlaylist(client, discoverWeeklyID, targetID)
+			err := api.CopyPlaylist(client, discoverWeeklyID, targetID)
 			if err != nil {
 				log.Printf("Error copying playlist: %v", err)
 			} else {
