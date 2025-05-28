@@ -27,6 +27,6 @@ env.sh
 token.json
 
 data/*
-cmd/fuzzy_queuer/fuzzy_queuer
-cmd/dw_archivist/dw_archivist
+cmd/fuzzy-queuer/fuzzy-queuer
+cmd/dw-archivist/dw-archivist
 playlists.txt

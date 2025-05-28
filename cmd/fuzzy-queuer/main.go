@@ -51,7 +51,7 @@ func main() {
 
 	// TODO: Time-based re-cache (for sqlite)
 	if refreshCache {
-		if err := os.Remove(dbPath); err != nil {
+		if err := cache.Clear(); err != nil {
 			fmt.Println(err)
 			return
 		}

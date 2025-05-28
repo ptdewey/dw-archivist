@@ -1,8 +1,6 @@
 package cache
 
 import (
-	"log"
-
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/ptdewey/spotify-tools/internal/types"
@@ -25,9 +23,8 @@ func InitDB(filename string) {
 		id TEXT PRIMARY KEY,
 		uri TEXT NOT NULL
 	);`
-	_, err = db.Exec(query)
-	if err != nil {
-		log.Println(err)
+
+	if _, err = db.Exec(query); err != nil {
 		return
 	}
 }
@@ -47,11 +44,14 @@ func InsertTracks(tracks []types.SimplerTrack) error {
 		:uri
 	);`
 
-	if _, err := db.NamedExec(query, tracks); err != nil {
-		return err
-	}
+	_, err := db.NamedExec(query, tracks)
+	return err
+}
 
-	return nil
+func Clear() error {
+	query := "DELETE FROM Tracks"
+	_, err := db.Exec(query)
+	return err
 }
 
 func readTracksSQL() ([]types.SimplerTrack, error) {
